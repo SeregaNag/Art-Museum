@@ -1,15 +1,8 @@
 import { useState, useEffect } from "react";
 import { fetchArtworks } from "../../utils/api";
 import SearchForm from "../../components/searchForm/searchFrom";
+import { Artwork } from "../../types/types";
 
-export interface Artwork {
-  id: number;
-  title: string;
-  artist_title: string | null;
-  date_display: string | null;
-  image_id: string | null;
-  is_public_domain: boolean;
-}
 
 const HomePage = () => {
   const [artworks, setArtworks] = useState<Artwork[]>([]);

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Artwork } from "../pages/HomePage/HomePage";
+import { Artwork } from "../types/types";
 
 const API_URL = "https://api.artic.edu/api/v1";
 
