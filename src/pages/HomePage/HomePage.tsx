@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchArtworks } from "../../utils/api";
+import { fetchArtworks, fetchSearchArtworks, fetchArtworkByLink } from "../../utils/api";
 import SearchForm from "../../components/searchForm/searchFrom";
 import { Artwork } from "../../types/types";
 import PaintingCard from "../../components/paintingCard/paintingCard"
@@ -8,41 +8,37 @@ import "./HomePage.scss"
 
 const HomePage = () => {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [filteredArtworks, setFilteredArtworks] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  useEffect(() => {
-    const loadArtworks = async () => {
-      setLoading(true);
-      try {
+  const loadArtworks = async () => {
+    setLoading(true);
+    try {
+      if (searchQuery.trim() === "") {
         const data = await fetchArtworks(page);
         setArtworks(data);
-        setFilteredArtworks(data);
-      } catch (error) {
-        console.error("Ошибка при загрузке данных:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadArtworks();
-  }, [page]);
-
-  useEffect(() => {
-    // Фильтруем картины по поисковому запросу
-    const filtered = artworks.filter((artwork) => {
-      return (
-        artwork.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (artwork.artist_title && artwork.artist_title.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
-    });
-    setFilteredArtworks(filtered); // Обновляем отфильтрованный список
-  }, [searchQuery, artworks]);
+      } else {
+        const searchResults = await fetchSearchArtworks(searchQuery, page);
   
+        const detailedArtworks = await Promise.all(
+          searchResults.map((item: any) => fetchArtworkByLink(item.api_link))
+        );
+  
+        setArtworks(detailedArtworks);
+      }
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    loadArtworks();
+  }, [searchQuery, page]);
 
-  const handleSearch = async (values: { query?: string }) => {
+  const handleSearch = (values: { query?: string }) => {
     setSearchQuery(values.query || "");
     setPage(1);
   };
@@ -63,7 +59,7 @@ const HomePage = () => {
         <p>Loading...</p>
       ) : (
         <div className="painting-list">
-          {filteredArtworks.map((artwork) => (
+          {artworks.map((artwork) => (
             <PaintingCard
               key={artwork.id}
               image={artwork.imageUrl}
