@@ -38,6 +38,7 @@ const SearchForm: React.FC<{
 
   const handleClear = () => {
     formik.setFieldValue("query", "");
+    debouncedSubmit({ query: "" }); 
   };
 
   return (
