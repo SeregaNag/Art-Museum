@@ -7,6 +7,7 @@ interface PaintingCardProps {
   artist: string | null;
   isPublic: boolean;
   onFavoriteClick: () => void;
+  isFavorite: boolean;
 }
 
 const PaintingCard: React.FC<PaintingCardProps> = ({
@@ -15,6 +16,7 @@ const PaintingCard: React.FC<PaintingCardProps> = ({
   artist,
   isPublic,
   onFavoriteClick,
+  isFavorite
 }) => {
   return (
     <div className="painting-card">
@@ -35,7 +37,7 @@ const PaintingCard: React.FC<PaintingCardProps> = ({
           className="painting-card__favorite-btn"
           onClick={onFavoriteClick}
         >
-          Add to Favorites
+          {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
         </button>
       </div>
     </div>

@@ -11,6 +11,8 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [favorites, setFavorites] = useState<Artwork[]>([]);
+  
 
   const loadArtworks = async () => {
     setLoading(true);
@@ -38,14 +40,30 @@ const HomePage = () => {
     loadArtworks();
   }, [searchQuery, page]);
 
+  useEffect(() => {
+    const storedFavorites = sessionStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
   const handleSearch = (values: { query?: string }) => {
     setSearchQuery(values.query || "");
     setPage(1);
   };
 
-  const handleAddToFavorites = (id: number) => {
-    console.log(`Artwork with ID ${id} added to favorites.`);
-    
+  const handleAddToFavorites = (artwork: Artwork) => {
+    setFavorites((prevFavorites) => {
+      if (prevFavorites.some((fav) => fav.id === artwork.id)) {
+        return prevFavorites.filter((fav) => fav.id !== artwork.id); // Удаление из избранного
+      } else {
+        return [...prevFavorites, artwork]; // Добавление в избранное
+      }
+    });
   };
 
   console.log(artworks);
@@ -66,7 +84,8 @@ const HomePage = () => {
               title={artwork.title}
               artist={artwork.artist_title}
               isPublic={artwork.is_public_domain}
-              onFavoriteClick={() => handleAddToFavorites(artwork.id)}
+              isFavorite={favorites.some((fav) => fav.id === artwork.id)}
+              onFavoriteClick={() => handleAddToFavorites(artwork)}
             />
           ))}
         </div>
