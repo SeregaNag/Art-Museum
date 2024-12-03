@@ -10,7 +10,7 @@ const Router = () => {
         <BurgerMenu />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/paint/:id" element={<PaintingDetailPage />} />
+          <Route path="/artwork/:id" element={<PaintingDetailPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
         </Routes>
       </BrowserRouter>

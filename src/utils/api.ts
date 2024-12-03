@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Artwork } from "../types/types";
+import { Artwork, ArtworkDetails } from "../types/types";
 
 const API_URL = "https://api.artic.edu/api/v1";
 
@@ -24,10 +24,6 @@ export const fetchArtworks = async (page: number = 1):Promise<Artwork[]> => {
       limit: 5, 
     },
   });
-
-  
-  console.log(response);
-  
 
   const iiifUrl = response.data.config.iiif_url;
 
@@ -73,7 +69,28 @@ export const fetchArtworkByLink = async (apiLink: string) => {
   };
 };
 
-export const fetchArtworkDetails = async (id: string) => {
-  const response = await apiClient.get(`/artworks/${id}`);
-  return response.data;
+export const fetchArtworkDetails = async (id: string): Promise<ArtworkDetails> => {
+  try {
+    const response = await apiClient.get(`/artworks/${id}`);
+    const data = response.data.data;
+
+    const iiifUrl = response.data.config.iiif_url;
+    return {
+      id: data.id,
+      title: data.title,
+      image_id: data.image_id || '',
+      imageUrl: data.image_id
+      ? `${iiifUrl}/${data.image_id}/full/843,/0/default.jpg`
+      : "https://via.placeholder.com/150?text=No+Image", 
+      artist_title: data.artist_title,
+      is_public_domain: data.is_public_domain,
+      description: data.description, 
+      dimensions: data.dimensions,
+      date_display: data.date_display,
+      medium_display: data.medium_display,
+    };
+  } catch (error) {
+    console.error("Ошибка получения данных о картине:", error);
+    throw error;
+  }
 };

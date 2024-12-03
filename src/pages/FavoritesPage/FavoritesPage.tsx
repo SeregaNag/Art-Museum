@@ -27,6 +27,7 @@ const FavoritesPage = () => {
           {favorites.map((artwork) => (
             <PaintingCard
               key={artwork.id}
+              id={artwork.id}
               image={artwork.imageUrl}
               title={artwork.title}
               artist={artwork.artist_title}
