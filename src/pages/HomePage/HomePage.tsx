@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { fetchArtworks, fetchSearchArtworks, fetchArtworkByLink } from "../../utils/api";
-import SearchForm from "../../components/searchForm/searchFrom";
-import { Artwork } from "../../types/types";
-import PaintingCard from "../../components/paintingCard/paintingCard"
+import { fetchArtworks, fetchSearchArtworks, fetchArtworkByLink } from "utils/api";
+import SearchForm from "components/searchForm/searchFrom";
+import { Artwork } from "types/types";
+import PaintingCard from "components/paintingCard/paintingCard"
 import "./HomePage.scss"
 
 
@@ -72,7 +72,7 @@ const HomePage = () => {
       <SearchForm onSubmit={handleSearch} />
 
       {loading ? (
-        <p>Loading...</p>
+       <div className="loader"></div>
       ) : (
         <div className="painting-list">
           {artworks.map((artwork) => (
