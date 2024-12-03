@@ -56,7 +56,7 @@ const SearchForm: React.FC<{
         <div className="search-buttons">
           <button
             type="button"
-            className="favorite-btn" // Стили для кнопки как у "Add to Favorites"
+            className="favorite-btn"
             onClick={handleClear}
           >
             Clear

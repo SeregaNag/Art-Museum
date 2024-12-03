@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import PaintingCard from "../../components/paintingCard/paintingCard";
-import { Artwork } from "../../types/types";
+import PaintingCard from "components/paintingCard/paintingCard";
+import { Artwork } from "types/types";
 import "./FavoritesPage.scss"
 
 const FavoritesPage = () => {

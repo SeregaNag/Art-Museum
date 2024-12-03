@@ -1,9 +1,9 @@
 import axios from "axios";
-import { Artwork, ArtworkDetails } from "../types/types";
+import { Artwork, ArtworkDetails } from "types/types";
 
 const API_URL = "https://api.artic.edu/api/v1";
 
-const apiClient = axios.create({
+export const apiClient = axios.create({
   baseURL: API_URL,
   timeout: 5000,
 });
