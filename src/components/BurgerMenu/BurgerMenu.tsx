@@ -19,12 +19,12 @@ export const BurgerMenu = () => {
         <ul>
           <li>
             <Link to="/" onClick={toggleMenu}>
-              Главная
+              Main
             </Link>
           </li>
           <li>
             <Link to="/favorites" onClick={toggleMenu}>
-              Избранное
+              Favorites
             </Link>
           </li>
         </ul>
