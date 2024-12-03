@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import "./paintingCard.scss";
+import { Link } from 'react-router-dom';
+import './paintingCard.scss';
 
 interface PaintingCardProps {
   id: number;
@@ -32,20 +32,20 @@ const PaintingCard: React.FC<PaintingCardProps> = ({
         </div>
         <div className="painting-card__content">
           <h3 className="painting-card__title">{title}</h3>
-          <p className="painting-card__artist">{artist || "Unknown Artist"}</p>
+          <p className="painting-card__artist">{artist || 'Unknown Artist'}</p>
           <p className="painting-card__public">
-            {isPublic ? "Public" : "Private"}
+            {isPublic ? 'Public' : 'Private'}
           </p>
         </div>
       </Link>
       <button
         className="painting-card__favorite-btn"
         onClick={(e) => {
-          e.stopPropagation(); 
+          e.stopPropagation();
           onFavoriteClick();
         }}
       >
-        {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+        {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
       </button>
     </div>
   );

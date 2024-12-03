@@ -1,7 +1,7 @@
-import Router from "./components/router/router";
+import Router from './components/router/router';
 
 function App() {
   return <Router />;
 }
 
-export default App
+export default App;

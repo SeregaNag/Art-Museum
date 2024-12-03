@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import PaintingCard from "components/paintingCard/paintingCard";
-import { Artwork } from "types/types";
-import "./FavoritesPage.scss"
+import { useState, useEffect } from 'react';
+import PaintingCard from 'components/paintingCard/paintingCard';
+import { Artwork } from 'types/types';
+import './FavoritesPage.scss';
 
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState<Artwork[]>([]);
 
   useEffect(() => {
-    const storedFavorites = sessionStorage.getItem("favorites");
+    const storedFavorites = sessionStorage.getItem('favorites');
     if (storedFavorites) {
       setFavorites(JSON.parse(storedFavorites));
     }
@@ -16,7 +16,7 @@ const FavoritesPage = () => {
   const handleRemoveFavorite = (id: number) => {
     const updatedFavorites = favorites.filter((artwork) => artwork.id !== id);
     setFavorites(updatedFavorites);
-    sessionStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    sessionStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
   return (

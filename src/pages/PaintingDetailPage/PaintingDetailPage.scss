@@ -6,7 +6,7 @@
 
   .artwork-image {
     max-width: 100%;
-    max-height: 300px; 
+    max-height: 300px;
     margin-bottom: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -14,13 +14,13 @@
 
   .favorite-btn {
     padding: 10px;
-    margin: 10px 0; 
+    margin: 10px 0;
     background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    font-size: 1rem; 
+    font-size: 1rem;
 
     &:disabled {
       background-color: #ccc;
@@ -31,12 +31,12 @@
     text-align: center;
 
     h1 {
-      font-size: 1.8rem; 
+      font-size: 1.8rem;
       margin-bottom: 10px;
     }
 
     p {
-      font-size: 1rem; 
+      font-size: 1rem;
       margin: 5px 0;
     }
   }
@@ -45,21 +45,21 @@
     padding: 10px;
 
     .artwork-image {
-      max-height: 250px; 
+      max-height: 250px;
     }
 
     .favorite-btn {
-      font-size: 0.9rem; 
+      font-size: 0.9rem;
       padding: 8px;
     }
 
     .artwork-info {
       h1 {
-        font-size: 1.5rem; 
+        font-size: 1.5rem;
       }
 
       p {
-        font-size: 0.9rem; 
+        font-size: 0.9rem;
       }
     }
   }

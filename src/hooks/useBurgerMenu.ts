@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 
 export const useBurgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,29 +9,29 @@ export const useBurgerMenu = () => {
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (!target.closest(".burger-menu")) {
+    if (!target.closest('.burger-menu')) {
       closeMenu();
     }
   }, []);
 
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
       closeMenu();
     }
   }, []);
 
   useEffect(() => {
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, handleClickOutside, handleKeyDown]);
 

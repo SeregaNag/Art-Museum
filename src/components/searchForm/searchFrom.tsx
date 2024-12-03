@@ -1,14 +1,14 @@
-import { useCallback } from "react";
-import { useFormik } from "formik";
-import { z } from "zod";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { debounce } from "lodash";
-import "./searchForm.scss";
+import { useCallback } from 'react';
+import { useFormik } from 'formik';
+import { z } from 'zod';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { debounce } from 'lodash';
+import './searchForm.scss';
 
 const searchSchema = z.object({
   query: z
     .string()
-    .max(100, "Query must be shorter than 100 symbols")
+    .max(100, 'Query must be shorter than 100 symbols')
     .optional(),
 });
 
@@ -19,7 +19,7 @@ const SearchForm: React.FC<{
 }> = ({ onSubmit }) => {
   const formik = useFormik<SearchFormValues>({
     initialValues: {
-      query: "",
+      query: '',
     },
     validationSchema: toFormikValidationSchema(searchSchema),
     onSubmit,
@@ -38,8 +38,8 @@ const SearchForm: React.FC<{
   };
 
   const handleClear = () => {
-    formik.setFieldValue("query", "");
-    debouncedSubmit({ query: "" });
+    formik.setFieldValue('query', '');
+    debouncedSubmit({ query: '' });
   };
 
   return (
@@ -54,11 +54,7 @@ const SearchForm: React.FC<{
           onBlur={formik.handleBlur}
         />
         <div className="search-buttons">
-          <button
-            type="button"
-            className="favorite-btn"
-            onClick={handleClear}
-          >
+          <button type="button" className="favorite-btn" onClick={handleClear}>
             Clear
           </button>
           <button type="submit" className="favorite-btn">
@@ -66,7 +62,7 @@ const SearchForm: React.FC<{
           </button>
         </div>
         {formik.touched.query && formik.errors.query && (
-          <div style={{ color: "red" }}>{formik.errors.query}</div>
+          <div style={{ color: 'red' }}>{formik.errors.query}</div>
         )}
       </div>
     </form>

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { useBurgerMenu } from "hooks/useBurgerMenu";
-import "./BurgerMenu.scss";
+import { Link } from 'react-router-dom';
+import { useBurgerMenu } from 'hooks/useBurgerMenu';
+import './BurgerMenu.scss';
 
 export const BurgerMenu = () => {
   const { isOpen, toggleMenu } = useBurgerMenu();
@@ -11,11 +11,11 @@ export const BurgerMenu = () => {
         className="burger-toggle"
         onClick={toggleMenu}
         aria-label="Toggle Menu"
-        style={{ display: isOpen ? "none" : "block" }} 
+        style={{ display: isOpen ? 'none' : 'block' }}
       >
         ☰
       </button>
-      <nav className={`menu ${isOpen ? "active" : ""}`}>
+      <nav className={`menu ${isOpen ? 'active' : ''}`}>
         <ul>
           <li>
             <Link to="/" onClick={toggleMenu}>
