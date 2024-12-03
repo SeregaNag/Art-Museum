@@ -37,7 +37,7 @@ export const fetchArtworks = async (page: number = 1):Promise<Artwork[]> => {
      title: item.title,
      artist_title: item.artist_title || null,
      date_display: item.date_display || null,
-     image_id: item.image_id || '', // Получаем image_id для каждого произведения
+     image_id: item.image_id || '', 
      imageUrl: getImageUrl(item.image_id, iiifUrl),
      is_public_domain: item.is_public_domain || false,
    }));
@@ -48,17 +48,17 @@ export const fetchSearchArtworks = async (query: string, page: number = 1) => {
     params: {
       q: query,
       page,
-      limit: 5, // Пять картин на страницу
+      limit: 5, 
     },
   });
-  return response.data.data; // Массив объектов из `artworks/search`
+  return response.data.data; 
 };
 
 export const fetchArtworkByLink = async (apiLink: string) => {
-  const response = await axios.get(apiLink); // Используем прямой запрос к apiLink
-  const artwork = response.data.data; // Данные о картине
+  const response = await axios.get(apiLink); 
+  const artwork = response.data.data; 
 
-  // Преобразуем в структуру Artwork
+  
   const iiifUrl = response.data.config.iiif_url;
   return {
     id: artwork.id,

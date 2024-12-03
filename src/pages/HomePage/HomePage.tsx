@@ -59,9 +59,9 @@ const HomePage = () => {
   const handleAddToFavorites = (artwork: Artwork) => {
     setFavorites((prevFavorites) => {
       if (prevFavorites.some((fav) => fav.id === artwork.id)) {
-        return prevFavorites.filter((fav) => fav.id !== artwork.id); // Удаление из избранного
+        return prevFavorites.filter((fav) => fav.id !== artwork.id); 
       } else {
-        return [...prevFavorites, artwork]; // Добавление в избранное
+        return [...prevFavorites, artwork]; 
       }
     });
   };
