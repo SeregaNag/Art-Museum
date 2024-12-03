@@ -8,7 +8,7 @@ import "./searchForm.scss";
 const searchSchema = z.object({
   query: z
     .string()
-    .max(100, "Запрос не может быть длиннее 100 символов")
+    .max(100, "Query must be shorter than 100 symbols")
     .optional(),
 });
 

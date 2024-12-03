@@ -22,7 +22,7 @@ const PaintingDetailPage = () => {
         setFavorites(storedFavorites);
         setIsFavorite(storedFavorites.some((favorite: ArtworkDetails) => favorite.id === data.id));
       } catch (error) {
-        console.error("Ошибка загрузки данных:", error);
+        console.error("Fetching error:", error);
       } finally {
         setLoading(false);
       }
@@ -48,7 +48,7 @@ const PaintingDetailPage = () => {
   };
 
   if (loading) return <p>Loading...</p>;
-  if (!artwork) return <p>Картина не найдена</p>;
+  if (!artwork) return <p>Artwork does not found</p>;
 
   return (
     <div className="artwork-details">

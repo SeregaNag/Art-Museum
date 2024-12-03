@@ -30,7 +30,7 @@ const HomePage = () => {
         setArtworks(detailedArtworks);
       }
     } catch (error) {
-      console.error("Ошибка загрузки данных:", error);
+      console.error("Fetching error:", error);
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,7 @@ const HomePage = () => {
         >
           Previous page
         </button>
-        <span>Страница: {page}</span>
+        <span>Page: {page}</span>
         <button onClick={() => setPage((prev) => prev + 1)}>Next page</button>
       </div>
     </div>
