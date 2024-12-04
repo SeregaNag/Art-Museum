@@ -1,50 +1,55 @@
-# React + TypeScript + Vite
+#Приложение для отображения каталога с картинами
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## API:
 
-Currently, two official plugins are available:
+Список API для использования:
+[Art API](https://api.artic.edu/docs/#introduction)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Необходимый функционал
 
-## Expanding the ESLint configuration
+- Получение данных о картинах с внешнего API;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/utils/api.ts реализовано несколько функций под свои задачи, такие как загрузка всех картин, одной через id, одной через link и тд.)
+- Отображение списка картин с возможностью пагинации;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/pages/HomePage/HomePage.tsx пагинация по 5 картин на страницу)
+- Реализация формы поиска с валидацией введенных данных;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/components/searchForm/searchFrom.tsx валидация через zod и formik, особо нечего валидировать, так как это форма поиска а не регистрации допустим)
+- Использование роутинга для разделения страниц приложения;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/components/router/router.tsx пользоваться им можно через бургер меню)
+- ??? Реализация дебаунса для поисковой формы;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/components/searchForm/searchFrom.tsx реализован с помощью библиотеки lodash, первый раз делал)
+- Возможность добавления картины в список избранных с сохранением их в SessionStorage;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/components/paintingCard/paintingCard.tsx в избранное добавляем по кнопке и убираем соответственно)
+- Возможность просмотра более детальной информации о картине;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/pages/PaintingDetailPage/PaintingDetailPage.tsx)
+- Интерфейс для просмотра списка избранных и возможности удаления из списка;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/pages/FavoritesPage/FavoritesPage.tsx)
+- Реализация возможности сортировки картин по различным критериям (по дате или алфавиту) (продумать самостоятельно).❌(к сожалению не получилось реализовать сортировку, пробовал сделать на стороне клиента, но с учетом того что нельзя выгрузить все картины разом отпадает, пробовал сделать через API эндпоинт /artworks/search но там параметр sort работает вместе с параметром q которого может и не быть, и не нашёл в документации адекватного описания как этим параметром вообще пользоваться)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Так же проект предполагает
 
-- Configure the top-level `parserOptions` property like this:
+- При загрузке товаров необходимо реализовать Loader; ✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/pages/HomePage/HomePage.tsx лоадер реализован при помощи состояния и спинера)
+- Оптимизацию дизайна под мобильные устройства (до 420px);✅(реализованы медиа-запросы, и использованы rem величины)
+- Реализацию burger-menu с реализовацией кастомного хука при закрытии;✅(https://github.com/SeregaNag/Art-Museum/blob/main/src/components/BurgerMenu/BurgerMenu.tsx реализовано бургер меню и хук закрывающий меню при определенных условиях)
+- Исполльзовать React context по необходимости;❌ не пригодился так как не было авторизации или той же смены темы, где его обычно использую
+- Использование TypeScript для типизирования и уменьшения количества потенциальных багов;✅
+- Использование алиасов для импортирования файлов;✅
+- Покрытие тестами 40% функциональности приложения;✅❌(Впервые писал тесты https://github.com/SeregaNag/Art-Museum/tree/main/src/tests более менее разобрался как писать тесты для функций ничего не выводящих на экран, 
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |   91.66 |       64 |     100 |   89.65 |                   
+ api.ts   |   91.66 |       64 |     100 |   89.65 | 15,93-94          
+----------|---------|----------|---------|---------|-------------------
+Вот что вывел yarn test --coverage)
+- Организацию файловой структуры react приложения. Ссылка на структуру: [Структура проекта](https://github.com/mkrivel/structure);✅
+- Деплой приложения на платформу GitHub Pages или иные другие (Netlify, Vercel);✅(https://674f8db9058067000800156e--moonlit-maamoul-a13ff0.netlify.app/)
+- Настройку конфигурации eslint, prettier, husky;✅❌(С помощью eslint нашёл пару мест в которых был тип any, с помощью prettier отформатировал код, husky не трогал)
+- Использование корректного GitFlow в проекте;✅(![image](https://github.com/user-attachments/assets/9a401e32-19cf-416f-a075-36cd3d51479a) тоже в первый раз следовал gitflow можно было сделать, ещё лучше создавать ветки hotfix/... и тд.
+- Использование сторонних библиотек для стилей - запрещены, кроме рекомендуемых в пункте “Используемые технологии”.✅
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+## Используемые технологии
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react';
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-});
-```
+- **_node.js_** - программная платформа, основанная на движке V8 (транслирующем JavaScript в машинный код);
+- **_eslint_** - линтер для JavaScript кода;
+- **_prettier_** - инструмент для автоформатирования кода;
+- **_yarn_** - менеджер пакетов;
+- **_react_** - JavaScript-библиотека для создания пользовательских интерфейсов;
+- **_typescript_** - строго типизированный язык для уменьшения количества потенциальных багов;
+- **_vite_** - инструмент сборки;
+- **_SCSS_** - препроцессор, который служит для быстрого написания CSS стилей;
+- **_jest_** - библиотека для unit-тестирования;
+- **_react-router-dom_** - библиотека для навигации между разными частями веб-приложения;
+- **_zod_** - библиотека для валидации форм;
+- **_formik_** - библиотека для обработки элемента ввода формы.
