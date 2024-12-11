@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
-import { useBurgerMenu } from 'hooks/useBurgerMenu';
 import './BurgerMenu.scss';
+
+import { useBurgerMenu } from 'hooks/useBurgerMenu';
+import { Link } from 'react-router-dom';
 
 export const BurgerMenu = () => {
   const { isOpen, toggleMenu } = useBurgerMenu();

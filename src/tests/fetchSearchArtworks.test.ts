@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
-import { apiClient } from 'utils/api';
-import { fetchSearchArtworks } from 'utils/api';
+import { apiClient } from '../utils/api';
+import { fetchSearchArtworks } from '../utils/api';
 
 describe('fetchSearchArtworks', () => {
   let mock: InstanceType<typeof MockAdapter>;
