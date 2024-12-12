@@ -7,7 +7,7 @@ export default {
     '^pages/(.*)$': '<rootDir>/src/pages/$1',
     '^utils/(.*)$': '<rootDir>/src/utils/$1',
     '^types/(.*)$': '<rootDir>/src/types/$1',
-    // Добавьте другие алиасы здесь
+    '^constants/(.*)$': '<rootDir>/src/constants/$1',
   },
   transform: {
     '^.+.tsx?$': ['ts-jest', {}],

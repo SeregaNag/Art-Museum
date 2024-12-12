@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import PaintingCard from 'components/paintingCard/paintingCard';
-import { Artwork } from 'types/types';
 import './FavoritesPage.scss';
+
+import PaintingCard from 'components/paintingCard/paintingCard';
+import { useEffect, useState } from 'react';
+import { Artwork } from 'types/types';
 
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState<Artwork[]>([]);

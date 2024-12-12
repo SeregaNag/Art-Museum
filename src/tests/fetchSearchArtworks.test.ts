@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { apiClient } from '../utils/api';
 import { fetchSearchArtworks } from '../utils/api';
 

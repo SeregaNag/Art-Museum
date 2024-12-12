@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import './HomePage.scss';
+
+import PaintingCard from 'components/paintingCard/paintingCard';
+import SearchForm from 'components/searchForm/searchFrom';
+import { useEffect, useState } from 'react';
+import { Artwork, ArtworkSearch } from 'types/types';
 import {
+  fetchArtworkByLink,
   fetchArtworks,
   fetchSearchArtworks,
-  fetchArtworkByLink,
 } from 'utils/api';
-import SearchForm from 'components/searchForm/searchFrom';
-import { Artwork, ArtworkSearch } from 'types/types';
-import PaintingCard from 'components/paintingCard/paintingCard';
-import './HomePage.scss';
 
 const HomePage = () => {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
@@ -26,7 +27,9 @@ const HomePage = () => {
         const searchResults = await fetchSearchArtworks(searchQuery, page);
 
         const detailedArtworks: Artwork[] = await Promise.all(
-          searchResults.map((item: ArtworkSearch) => fetchArtworkByLink(item.api_link))
+          searchResults.map((item: ArtworkSearch) =>
+            fetchArtworkByLink(item.api_link)
+          )
         );
 
         setArtworks(detailedArtworks);

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Artwork, ArtworkDetails, ArtworkSearch } from '../types/types';
+import { API_URL, IMAGE_PLACEHOLDER } from 'constants/apiConstants';
 
-const API_URL = 'https://api.artic.edu/api/v1';
+import { Artwork, ArtworkDetails, ArtworkSearch } from '../types/types';
 
 export const apiClient = axios.create({
   baseURL: API_URL,
@@ -12,7 +12,7 @@ const getImageUrl = (image_id: string, iiifUrl: string): string => {
   if (image_id) {
     return `${iiifUrl}/${image_id}/full/843,/0/default.jpg`;
   }
-  return 'https://via.placeholder.com/150?text=No+Image';
+  return IMAGE_PLACEHOLDER;
 };
 
 export const fetchArtworks = async (page: number = 1): Promise<Artwork[]> => {
@@ -62,7 +62,7 @@ export const fetchArtworkByLink = async (apiLink: string) => {
     image_id: artwork.image_id || '',
     imageUrl: artwork.image_id
       ? `${iiifUrl}/${artwork.image_id}/full/843,/0/default.jpg`
-      : 'https://via.placeholder.com/150?text=No+Image',
+      : IMAGE_PLACEHOLDER,
     is_public_domain: artwork.is_public_domain || false,
   };
 };
@@ -81,7 +81,7 @@ export const fetchArtworkDetails = async (
       image_id: data.image_id || '',
       imageUrl: data.image_id
         ? `${iiifUrl}/${data.image_id}/full/843,/0/default.jpg`
-        : 'https://via.placeholder.com/150?text=No+Image',
+        : IMAGE_PLACEHOLDER,
       artist_title: data.artist_title,
       is_public_domain: data.is_public_domain,
       description: data.description,

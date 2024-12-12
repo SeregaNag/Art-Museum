@@ -14,7 +14,8 @@
       "assets/*": ["assets/*"],
       "types/*": ["types/*"],
       "hooks/*": ["hooks/*"],
-      "pages/*": ["pages/*"]
+      "pages/*": ["pages/*"],
+      "constants/*": ["constants/*"]
     },
 
     /* Bundler mode */
