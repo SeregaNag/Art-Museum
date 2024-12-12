@@ -1,9 +1,10 @@
-import { useCallback } from 'react';
+import './searchForm.scss';
+
 import { useFormik } from 'formik';
+import { debounce } from 'lodash';
+import { useCallback } from 'react';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { debounce } from 'lodash';
-import './searchForm.scss';
 
 const searchSchema = z.object({
   query: z

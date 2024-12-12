@@ -1,8 +1,9 @@
+import './PaintingDetailPage.scss';
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchArtworkDetails } from 'utils/api';
 import { ArtworkDetails } from 'types/types';
-import './PaintingDetailPage.scss';
+import { fetchArtworkDetails } from 'utils/api';
 
 const PaintingDetailPage = () => {
   const { id } = useParams<{ id: string }>();

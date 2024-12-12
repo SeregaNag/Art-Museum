@@ -1,22 +1,22 @@
 import axios from 'axios';
-import { Artwork, ArtworkDetails, ArtworkSearch } from '../types/types';
+import { API_URL, IMAGE_PLACEHOLDER } from 'constants/apiConstants';
+import { API_ENDPOINTS } from 'constants/apiEndpoints';
 
-const API_URL = 'https://api.artic.edu/api/v1';
+import { Artwork, ArtworkDetails, ArtworkSearch } from '../types/types';
 
 export const apiClient = axios.create({
   baseURL: API_URL,
   timeout: 5000,
 });
 
-const getImageUrl = (image_id: string, iiifUrl: string): string => {
-  if (image_id) {
-    return `${iiifUrl}/${image_id}/full/843,/0/default.jpg`;
-  }
-  return 'https://via.placeholder.com/150?text=No+Image';
+const getImageUrl = (image_id: string | null, iiifUrl: string): string => {
+  return image_id
+    ? `${iiifUrl}/${image_id}/full/843,/0/default.jpg`
+    : IMAGE_PLACEHOLDER;
 };
 
 export const fetchArtworks = async (page: number = 1): Promise<Artwork[]> => {
-  const response = await apiClient.get(`/artworks`, {
+  const response = await apiClient.get(API_ENDPOINTS.ARTWORKS, {
     params: {
       page,
       limit: 5,
@@ -39,7 +39,7 @@ export const fetchArtworks = async (page: number = 1): Promise<Artwork[]> => {
 };
 
 export const fetchSearchArtworks = async (query: string, page: number = 1) => {
-  const response = await apiClient.get(`/artworks/search`, {
+  const response = await apiClient.get(API_ENDPOINTS.SEARCH, {
     params: {
       q: query,
       page,
@@ -60,9 +60,7 @@ export const fetchArtworkByLink = async (apiLink: string) => {
     artist_title: artwork.artist_title || null,
     date_display: artwork.date_display || null,
     image_id: artwork.image_id || '',
-    imageUrl: artwork.image_id
-      ? `${iiifUrl}/${artwork.image_id}/full/843,/0/default.jpg`
-      : 'https://via.placeholder.com/150?text=No+Image',
+    imageUrl: getImageUrl(artwork.image_id, iiifUrl),
     is_public_domain: artwork.is_public_domain || false,
   };
 };
@@ -71,7 +69,7 @@ export const fetchArtworkDetails = async (
   id: string
 ): Promise<ArtworkDetails> => {
   try {
-    const response = await apiClient.get(`/artworks/${id}`);
+    const response = await apiClient.get(API_ENDPOINTS.ARTWORK_DETAILS(id));
     const data = response.data.data;
 
     const iiifUrl = response.data.config.iiif_url;
@@ -79,9 +77,7 @@ export const fetchArtworkDetails = async (
       id: data.id,
       title: data.title,
       image_id: data.image_id || '',
-      imageUrl: data.image_id
-        ? `${iiifUrl}/${data.image_id}/full/843,/0/default.jpg`
-        : 'https://via.placeholder.com/150?text=No+Image',
+      imageUrl: getImageUrl(data.image_id, iiifUrl),
       artist_title: data.artist_title,
       is_public_domain: data.is_public_domain,
       description: data.description,

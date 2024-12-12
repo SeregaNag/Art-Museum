@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
 import './paintingCard.scss';
+
+import { Link } from 'react-router-dom';
 
 interface PaintingCardProps {
   id: number;
