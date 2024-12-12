@@ -16,23 +16,29 @@ const HomePage = () => {
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [favorites, setFavorites] = useState<Artwork[]>([]);
+  const [noResults, setNoResults] = useState<boolean>(false);
 
   const loadArtworks = async () => {
     setLoading(true);
+    setNoResults(false);
     try {
       if (searchQuery.trim() === '') {
         const data = await fetchArtworks(page);
         setArtworks(data);
       } else {
         const searchResults = await fetchSearchArtworks(searchQuery, page);
+        if (searchResults.length === 0) {
+          setNoResults(true);
+          setArtworks([]);
+        } else {
+          const detailedArtworks: Artwork[] = await Promise.all(
+            searchResults.map((item: ArtworkSearch) =>
+              fetchArtworkByLink(item.api_link)
+            )
+          );
 
-        const detailedArtworks: Artwork[] = await Promise.all(
-          searchResults.map((item: ArtworkSearch) =>
-            fetchArtworkByLink(item.api_link)
-          )
-        );
-
-        setArtworks(detailedArtworks);
+          setArtworks(detailedArtworks);
+        }
       }
     } catch (error) {
       console.error('Fetching error:', error);
@@ -59,6 +65,7 @@ const HomePage = () => {
   const handleSearch = (values: { query?: string }) => {
     setSearchQuery(values.query || '');
     setPage(1);
+    setNoResults(false);
   };
 
   const handleAddToFavorites = (artwork: Artwork) => {
@@ -80,31 +87,39 @@ const HomePage = () => {
         <div className="loader"></div>
       ) : (
         <div className="painting-list">
-          {artworks.map((artwork) => (
-            <PaintingCard
-              key={artwork.id}
-              id={artwork.id}
-              image={artwork.imageUrl}
-              title={artwork.title}
-              artist={artwork.artist_title}
-              isPublic={artwork.is_public_domain}
-              isFavorite={favorites.some((fav) => fav.id === artwork.id)}
-              onFavoriteClick={() => handleAddToFavorites(artwork)}
-            />
-          ))}
+          {noResults ? (
+            <div style={{ color: 'red' }}>
+              No results were found for your request "{searchQuery}"
+            </div>
+          ) : (
+            artworks.map((artwork) => (
+              <PaintingCard
+                key={artwork.id}
+                id={artwork.id}
+                image={artwork.imageUrl}
+                title={artwork.title}
+                artist={artwork.artist_title}
+                isPublic={artwork.is_public_domain}
+                isFavorite={favorites.some((fav) => fav.id === artwork.id)}
+                onFavoriteClick={() => handleAddToFavorites(artwork)}
+              />
+            ))
+          )}
         </div>
       )}
 
-      <div className="pagination">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        >
-          Previous page
-        </button>
-        <span>Page: {page}</span>
-        <button onClick={() => setPage((prev) => prev + 1)}>Next page</button>
-      </div>
+      {!noResults && artworks.length > 0 && (
+        <div className="pagination">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          >
+            Previous page
+          </button>
+          <span>Page: {page}</span>
+          <button onClick={() => setPage((prev) => prev + 1)}>Next page</button>
+        </div>
+      )}
     </div>
   );
 };

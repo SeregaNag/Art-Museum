@@ -1,15 +1,20 @@
 import './searchForm.scss';
 
 import { useFormik } from 'formik';
-import { debounce } from 'lodash';
+import { useDebounce } from 'hooks/useDebounce';
 import { useCallback } from 'react';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
+const validateQueryLength = (val: string) =>
+  val.length >= 2 && val.length <= 30;
+
 const searchSchema = z.object({
   query: z
     .string()
-    .max(100, 'Query must be shorter than 100 symbols')
+    .refine(validateQueryLength, {
+      message: 'Query must be between 2 and 30 characters.',
+    })
     .optional(),
 });
 
@@ -26,25 +31,41 @@ const SearchForm: React.FC<{
     onSubmit,
   });
 
-  const debouncedSubmit = useCallback(
-    debounce((values: SearchFormValues) => {
-      onSubmit(values);
-    }, 500),
-    [onSubmit]
-  );
+  const debouncedSubmit = useDebounce((values: SearchFormValues) => {
+    console.log('Submit triggered with values:', values);
+    onSubmit(values);
+  }, 500);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    formik.handleChange(e);
-    debouncedSubmit({ query: e.target.value });
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const queryValue = e.target.value;
+      console.log('Input change detected:', e.target.value);
+
+      formik.handleChange(e);
+
+      if (validateQueryLength(queryValue)) {
+        debouncedSubmit({ query: queryValue });
+      } else {
+        debouncedSubmit({ query: '' });
+      }
+    },
+    [formik, debouncedSubmit]
+  );
 
   const handleClear = () => {
     formik.setFieldValue('query', '');
     debouncedSubmit({ query: '' });
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formik.isValid && formik.dirty) {
+      formik.submitForm();
+    }
+  };
+
   return (
-    <form onSubmit={formik.handleSubmit} className="search-form">
+    <form onSubmit={handleSubmit} className="search-form">
       <div>
         <input
           id="query"
@@ -57,9 +78,6 @@ const SearchForm: React.FC<{
         <div className="search-buttons">
           <button type="button" className="favorite-btn" onClick={handleClear}>
             Clear
-          </button>
-          <button type="submit" className="favorite-btn">
-            Search
           </button>
         </div>
         {formik.touched.query && formik.errors.query && (
