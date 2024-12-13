@@ -2,6 +2,7 @@ import './HomePage.scss';
 
 import PaintingCard from 'components/paintingCard/paintingCard';
 import SearchForm from 'components/searchForm/searchFrom';
+import Sort from 'components/Sort/sort';
 import { useEffect, useState } from 'react';
 import { Artwork, ArtworkSearch } from 'types/types';
 import {
@@ -17,16 +18,21 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [favorites, setFavorites] = useState<Artwork[]>([]);
   const [noResults, setNoResults] = useState<boolean>(false);
+  const [sortCriteria, setSortCriteria] = useState<string>('');
 
   const loadArtworks = async () => {
     setLoading(true);
     setNoResults(false);
     try {
-      if (searchQuery.trim() === '') {
+      if (searchQuery.trim() === '' && sortCriteria === '') {
         const data = await fetchArtworks(page);
         setArtworks(data);
       } else {
-        const searchResults = await fetchSearchArtworks(searchQuery, page);
+        const searchResults = await fetchSearchArtworks(
+          searchQuery,
+          page,
+          sortCriteria
+        );
         if (searchResults.length === 0) {
           setNoResults(true);
           setArtworks([]);
@@ -49,7 +55,7 @@ const HomePage = () => {
 
   useEffect(() => {
     loadArtworks();
-  }, [searchQuery, page]);
+  }, [searchQuery, page, sortCriteria]);
 
   useEffect(() => {
     const storedFavorites = sessionStorage.getItem('favorites');
@@ -82,6 +88,8 @@ const HomePage = () => {
     <div className="home-page">
       <h1>Art Museum</h1>
       <SearchForm onSubmit={handleSearch} />
+
+      <Sort onSortChange={setSortCriteria} />
 
       {loading ? (
         <div className="loader"></div>

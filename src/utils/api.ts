@@ -38,12 +38,17 @@ export const fetchArtworks = async (page: number = 1): Promise<Artwork[]> => {
   );
 };
 
-export const fetchSearchArtworks = async (query: string, page: number = 1) => {
+export const fetchSearchArtworks = async (
+  query: string,
+  page: number = 1,
+  sort: string = ''
+) => {
   const response = await apiClient.get(API_ENDPOINTS.SEARCH, {
     params: {
       q: query,
       page,
       limit: 5,
+      sort,
     },
   });
   return response.data.data;
