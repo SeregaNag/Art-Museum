@@ -2,6 +2,7 @@ import './HomePage.scss';
 
 import PaintingCard from 'components/paintingCard/paintingCard';
 import SearchForm from 'components/searchForm/searchFrom';
+import Sort from 'components/Sort/sort';
 import { useEffect, useState } from 'react';
 import { Artwork, ArtworkSearch } from 'types/types';
 import {
@@ -16,23 +17,34 @@ const HomePage = () => {
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [favorites, setFavorites] = useState<Artwork[]>([]);
+  const [noResults, setNoResults] = useState<boolean>(false);
+  const [sortCriteria, setSortCriteria] = useState<string>('');
 
   const loadArtworks = async () => {
     setLoading(true);
+    setNoResults(false);
     try {
-      if (searchQuery.trim() === '') {
+      if (searchQuery.trim() === '' && sortCriteria === '') {
         const data = await fetchArtworks(page);
         setArtworks(data);
       } else {
-        const searchResults = await fetchSearchArtworks(searchQuery, page);
-
-        const detailedArtworks: Artwork[] = await Promise.all(
-          searchResults.map((item: ArtworkSearch) =>
-            fetchArtworkByLink(item.api_link)
-          )
+        const searchResults = await fetchSearchArtworks(
+          searchQuery,
+          page,
+          sortCriteria
         );
+        if (searchResults.length === 0) {
+          setNoResults(true);
+          setArtworks([]);
+        } else {
+          const detailedArtworks: Artwork[] = await Promise.all(
+            searchResults.map((item: ArtworkSearch) =>
+              fetchArtworkByLink(item.api_link)
+            )
+          );
 
-        setArtworks(detailedArtworks);
+          setArtworks(detailedArtworks);
+        }
       }
     } catch (error) {
       console.error('Fetching error:', error);
@@ -43,7 +55,7 @@ const HomePage = () => {
 
   useEffect(() => {
     loadArtworks();
-  }, [searchQuery, page]);
+  }, [searchQuery, page, sortCriteria]);
 
   useEffect(() => {
     const storedFavorites = sessionStorage.getItem('favorites');
@@ -59,6 +71,7 @@ const HomePage = () => {
   const handleSearch = (values: { query?: string }) => {
     setSearchQuery(values.query || '');
     setPage(1);
+    setNoResults(false);
   };
 
   const handleAddToFavorites = (artwork: Artwork) => {
@@ -76,35 +89,45 @@ const HomePage = () => {
       <h1>Art Museum</h1>
       <SearchForm onSubmit={handleSearch} />
 
+      <Sort onSortChange={setSortCriteria} />
+
       {loading ? (
         <div className="loader"></div>
       ) : (
         <div className="painting-list">
-          {artworks.map((artwork) => (
-            <PaintingCard
-              key={artwork.id}
-              id={artwork.id}
-              image={artwork.imageUrl}
-              title={artwork.title}
-              artist={artwork.artist_title}
-              isPublic={artwork.is_public_domain}
-              isFavorite={favorites.some((fav) => fav.id === artwork.id)}
-              onFavoriteClick={() => handleAddToFavorites(artwork)}
-            />
-          ))}
+          {noResults ? (
+            <div style={{ color: 'red' }}>
+              No results were found for your request "{searchQuery}"
+            </div>
+          ) : (
+            artworks.map((artwork) => (
+              <PaintingCard
+                key={artwork.id}
+                id={artwork.id}
+                image={artwork.imageUrl}
+                title={artwork.title}
+                artist={artwork.artist_title}
+                isPublic={artwork.is_public_domain}
+                isFavorite={favorites.some((fav) => fav.id === artwork.id)}
+                onFavoriteClick={() => handleAddToFavorites(artwork)}
+              />
+            ))
+          )}
         </div>
       )}
 
-      <div className="pagination">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        >
-          Previous page
-        </button>
-        <span>Page: {page}</span>
-        <button onClick={() => setPage((prev) => prev + 1)}>Next page</button>
-      </div>
+      {!noResults && artworks.length > 0 && (
+        <div className="pagination">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          >
+            Previous page
+          </button>
+          <span>Page: {page}</span>
+          <button onClick={() => setPage((prev) => prev + 1)}>Next page</button>
+        </div>
+      )}
     </div>
   );
 };
