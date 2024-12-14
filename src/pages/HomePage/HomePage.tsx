@@ -10,13 +10,14 @@ import {
   fetchArtworks,
   fetchSearchArtworks,
 } from 'utils/api';
+import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 const HomePage = () => {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [favorites, setFavorites] = useState<Artwork[]>([]);
+  const [favorites, setFavorites] = useState<number[]>([]);
   const [noResults, setNoResults] = useState<boolean>(false);
   const [sortCriteria, setSortCriteria] = useState<string>('');
 
@@ -58,15 +59,9 @@ const HomePage = () => {
   }, [searchQuery, page, sortCriteria]);
 
   useEffect(() => {
-    const storedFavorites = sessionStorage.getItem('favorites');
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
+    const storedFavorites = SessionStorageHelper.getFavorites();
+    setFavorites(storedFavorites);
   }, []);
-
-  useEffect(() => {
-    sessionStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [favorites]);
 
   const handleSearch = (values: { query?: string }) => {
     setSearchQuery(values.query || '');
@@ -74,14 +69,9 @@ const HomePage = () => {
     setNoResults(false);
   };
 
-  const handleAddToFavorites = (artwork: Artwork) => {
-    setFavorites((prevFavorites) => {
-      if (prevFavorites.some((fav) => fav.id === artwork.id)) {
-        return prevFavorites.filter((fav) => fav.id !== artwork.id);
-      } else {
-        return [...prevFavorites, artwork];
-      }
-    });
+  const handleAddToFavorites = () => {
+    const updatedFavorites = SessionStorageHelper.getFavorites();
+    setFavorites(updatedFavorites);
   };
 
   return (
@@ -109,8 +99,8 @@ const HomePage = () => {
                   title={artwork.title}
                   artist={artwork.artist_title}
                   isPublic={artwork.is_public_domain}
-                  isFavorite={favorites.some((fav) => fav.id === artwork.id)}
-                  onFavoriteClick={() => handleAddToFavorites(artwork)}
+                  isFavorite={favorites.includes(artwork.id)}
+                  onFavoriteClick={() => handleAddToFavorites()}
                 />
               ))
             )}

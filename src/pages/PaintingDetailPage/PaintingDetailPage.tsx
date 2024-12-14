@@ -4,30 +4,23 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ArtworkDetails } from 'types/types';
 import { fetchArtworkDetails } from 'utils/api';
+import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 const PaintingDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [artwork, setArtwork] = useState<ArtworkDetails | null>(null);
   const [loading, setLoading] = useState(false);
-  const [favorites, setFavorites] = useState<ArtworkDetails[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const loadArtworkDetails = async () => {
+      if (!id) return;
       setLoading(true);
       try {
-        const data = await fetchArtworkDetails(id!);
+        const data = await fetchArtworkDetails(Number(id));
         setArtwork(data);
 
-        const storedFavorites = JSON.parse(
-          sessionStorage.getItem('favorites') || '[]'
-        );
-        setFavorites(storedFavorites);
-        setIsFavorite(
-          storedFavorites.some(
-            (favorite: ArtworkDetails) => favorite.id === data.id
-          )
-        );
+        setIsFavorite(SessionStorageHelper.isFavorite(Number(id)));
       } catch (error) {
         console.error('Fetching error:', error);
       } finally {
@@ -38,21 +31,13 @@ const PaintingDetailPage = () => {
     if (id) loadArtworkDetails();
   }, [id]);
 
-  useEffect(() => {
-    sessionStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [favorites]);
-
   const toggleFavorite = () => {
-    setFavorites((prevFavorites) => {
-      const updatedFavorites = prevFavorites.some(
-        (favorite) => favorite.id === artwork?.id
-      )
-        ? prevFavorites.filter((favorite) => favorite.id !== artwork?.id)
-        : [...prevFavorites, artwork!];
-
-      sessionStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-      return updatedFavorites;
-    });
+    if (!id) return;
+    if (isFavorite) {
+      SessionStorageHelper.removeFavorite(Number(id));
+    } else {
+      SessionStorageHelper.addFavorite(Number(id));
+    }
     setIsFavorite(!isFavorite);
   };
 
