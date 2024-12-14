@@ -2,24 +2,47 @@ import './FavoritesPage.scss';
 
 import PaintingCard from 'components/paintingCard/paintingCard';
 import { useEffect, useState } from 'react';
-import { Artwork } from 'types/types';
+import { Artwork, ArtworkDetails } from 'types/types';
+import { fetchArtworkDetails } from 'utils/api';
+import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState<Artwork[]>([]);
 
   useEffect(() => {
-    const storedFavorites = sessionStorage.getItem('favorites');
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
+    const loadFavorites = async () => {
+      const favoriteIds = SessionStorageHelper.getFavorites();
+      const favoriteArtworks: Artwork[] = [];
+
+      for (const id of favoriteIds) {
+        try {
+          const artworkDetails: ArtworkDetails = await fetchArtworkDetails(id);
+          const artwork: Artwork = {
+            id: artworkDetails.id,
+            image_id: artworkDetails.image_id,
+            imageUrl: artworkDetails.imageUrl,
+            title: artworkDetails.title,
+            artist_title: artworkDetails.artist_title || 'Unknown Artist',
+            is_public_domain: artworkDetails.is_public_domain,
+            date_display: artworkDetails.date_display || null,
+          };
+          favoriteArtworks.push(artwork);
+        } catch (error) {
+          console.error(`Error fetching artwork with id ${id}:`, error);
+        }
+      }
+
+      setFavorites(favoriteArtworks);
+    };
+
+    loadFavorites();
   }, []);
 
   const handleRemoveFavorite = (id: number) => {
-    const updatedFavorites = favorites.filter((artwork) => artwork.id !== id);
-    setFavorites(updatedFavorites);
-    sessionStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((artwork) => artwork.id !== id)
+    );
   };
-
   return (
     <div className="favorites-page">
       <h1>Favorites</h1>

@@ -42,17 +42,16 @@ export const fetchArtworks = async (page: number = 1): Promise<Artwork[]> => {
 
   const iiifUrl = response.data.config.iiif_url;
 
-  // Ожидаем результаты всех асинхронных запросов для получения URL изображения
   const artworks = await Promise.all(
     response.data.data.map(async (item: ArtworkSearch): Promise<Artwork> => {
-      const imageUrl = await getImageUrl(item.image_id, iiifUrl); // Ожидаем асинхронный результат
+      const imageUrl = await getImageUrl(item.image_id, iiifUrl);
       return {
         id: item.id,
         title: item.title,
         artist_title: item.artist_title || null,
         date_display: item.date_display || null,
         image_id: item.image_id || '',
-        imageUrl, // Теперь это строка
+        imageUrl,
         is_public_domain: item.is_public_domain || false,
       };
     })
@@ -82,7 +81,7 @@ export const fetchArtworkByLink = async (apiLink: string): Promise<Artwork> => {
   const artwork = response.data.data;
 
   const iiifUrl = response.data.config.iiif_url;
-  const imageUrl = await getImageUrl(artwork.image_id, iiifUrl); // Ожидаем асинхронный результат
+  const imageUrl = await getImageUrl(artwork.image_id, iiifUrl);
 
   return {
     id: artwork.id,
@@ -90,26 +89,26 @@ export const fetchArtworkByLink = async (apiLink: string): Promise<Artwork> => {
     artist_title: artwork.artist_title || null,
     date_display: artwork.date_display || null,
     image_id: artwork.image_id || '',
-    imageUrl, // Теперь это строка
+    imageUrl,
     is_public_domain: artwork.is_public_domain || false,
   };
 };
 
 export const fetchArtworkDetails = async (
-  id: string
+  id: number
 ): Promise<ArtworkDetails> => {
   try {
     const response = await apiClient.get(API_ENDPOINTS.ARTWORK_DETAILS(id));
     const data = response.data.data;
 
     const iiifUrl = response.data.config.iiif_url;
-    const imageUrl = await getImageUrl(data.image_id, iiifUrl); // Ожидаем асинхронный результат
+    const imageUrl = await getImageUrl(data.image_id, iiifUrl);
 
     return {
       id: data.id,
       title: data.title,
       image_id: data.image_id || '',
-      imageUrl, // Теперь это строка
+      imageUrl,
       artist_title: data.artist_title,
       is_public_domain: data.is_public_domain,
       description: data.description,

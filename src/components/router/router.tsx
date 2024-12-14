@@ -1,5 +1,5 @@
 import { BurgerMenu } from 'components/BurgerMenu/BurgerMenu';
-import { DesktopMenu } from 'components/DesktopMenu/DesktopMenu'; // Создадим отдельное меню
+import { DesktopMenu } from 'components/DesktopMenu/DesktopMenu';
 import { routes } from 'constants/routes';
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
