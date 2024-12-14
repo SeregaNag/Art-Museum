@@ -5,17 +5,27 @@
   h1 {
     font-size: 2rem;
     margin-bottom: 20px;
+    color: #fff;
   }
 
   .painting-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
     margin-top: 20px;
+
+    @media (max-width: 420px) {
+      gap: 15px;
+    }
   }
 
   p {
     font-size: 1.2rem;
     color: #fff;
+
+    @media (max-width: 420px) {
+      font-size: 1rem;
+    }
   }
 }

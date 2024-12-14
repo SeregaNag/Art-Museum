@@ -91,30 +91,32 @@ const HomePage = () => {
 
       <Sort onSortChange={setSortCriteria} />
 
-      {loading ? (
-        <div className="loader"></div>
-      ) : (
-        <div className="painting-list">
-          {noResults ? (
-            <div style={{ color: 'red' }}>
-              No results were found for your request "{searchQuery}"
-            </div>
-          ) : (
-            artworks.map((artwork) => (
-              <PaintingCard
-                key={artwork.id}
-                id={artwork.id}
-                image={artwork.imageUrl}
-                title={artwork.title}
-                artist={artwork.artist_title}
-                isPublic={artwork.is_public_domain}
-                isFavorite={favorites.some((fav) => fav.id === artwork.id)}
-                onFavoriteClick={() => handleAddToFavorites(artwork)}
-              />
-            ))
-          )}
-        </div>
-      )}
+      <div className="painting-container">
+        {loading ? (
+          <div className="loader"></div>
+        ) : (
+          <div className="painting-list">
+            {noResults ? (
+              <div style={{ color: 'red' }}>
+                No results were found for your request "{searchQuery}"
+              </div>
+            ) : (
+              artworks.map((artwork) => (
+                <PaintingCard
+                  key={artwork.id}
+                  id={artwork.id}
+                  image={artwork.imageUrl}
+                  title={artwork.title}
+                  artist={artwork.artist_title}
+                  isPublic={artwork.is_public_domain}
+                  isFavorite={favorites.some((fav) => fav.id === artwork.id)}
+                  onFavoriteClick={() => handleAddToFavorites(artwork)}
+                />
+              ))
+            )}
+          </div>
+        )}
+      </div>
 
       {!noResults && artworks.length > 0 && (
         <div className="pagination">

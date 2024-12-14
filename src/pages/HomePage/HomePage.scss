@@ -9,6 +9,7 @@
   h1 {
     font-size: 2rem;
     margin-bottom: 20px;
+    text-align: center;
   }
 
   .loader {
@@ -18,6 +19,8 @@
     width: 40px;
     height: 40px;
     animation: spin 1s linear infinite;
+    max-width: 100%;
+    margin: auto;
   }
 
   @keyframes spin {
@@ -29,13 +32,22 @@
     }
   }
 
+  .painting-container {
+    min-height: 300px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+
   .painting-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
     margin-top: 20px;
-    max-width: 1200px;
+    width: 100%;
   }
 
   .pagination {
