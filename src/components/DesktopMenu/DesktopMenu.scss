@@ -1,0 +1,28 @@
+.desktop-menu {
+  display: flex;
+  gap: 1rem;
+  background-color: #000;
+  padding: 1rem;
+  list-style: none;
+  align-items: center;
+  justify-content: center;
+
+  ul {
+    display: flex;
+    gap: 2rem;
+
+    li {
+      a {
+        text-decoration: none;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: #0056b3;
+        }
+      }
+    }
+  }
+}

@@ -56,51 +56,58 @@ const PaintingDetailPage = () => {
     setIsFavorite(!isFavorite);
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (!artwork) return <p>Artwork does not found</p>;
-
   return (
     <div className="artwork-details">
-      <img
-        src={artwork.imageUrl}
-        alt={artwork.title}
-        className="artwork-image"
-      />
-      <div className="artwork-info">
-        <h1>{artwork.title}</h1>
-        <p>
-          <strong>Author:</strong> {artwork.artist_title}
-        </p>
-        <p>
-          <strong>Public Domain:</strong>{' '}
-          {artwork.is_public_domain ? 'Yes' : 'No'}
-        </p>
-        <p>
-          <strong>Description:</strong>{' '}
-          {artwork.description || 'No description available.'}
-        </p>
-        {artwork.date_display && (
-          <p>
-            <strong>Date:</strong> {artwork.date_display}
-          </p>
-        )}
-        {artwork.dimensions && (
-          <p>
-            <strong>Dimensions:</strong> {artwork.dimensions}
-          </p>
-        )}
-        {artwork.medium_display && (
-          <p>
-            <strong>Medium:</strong> {artwork.medium_display}
-          </p>
-        )}
-        <button
-          className={`favorite-btn ${isFavorite ? 'favorite-btn--active' : ''}`}
-          onClick={toggleFavorite}
-        >
-          {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-        </button>
-      </div>
+      {loading && <p className="loader-details"></p>}
+      {!artwork && !loading && <p>Artwork does not found</p>}
+      {artwork && !loading && (
+        <>
+          <img
+            src={artwork.imageUrl}
+            alt={artwork.title}
+            className="artwork-image"
+          />
+          <div className="artwork-info">
+            <h1>{artwork.title}</h1>
+            <p>
+              <strong>Author:</strong> {artwork.artist_title}
+            </p>
+            <p>
+              <strong>Public Domain:</strong>{' '}
+              {artwork.is_public_domain ? 'Yes' : 'No'}
+            </p>
+            <p>
+              <strong>Description:</strong>{' '}
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: artwork.description || 'No description available.',
+                }}
+              />
+            </p>
+            {artwork.date_display && (
+              <p>
+                <strong>Date:</strong> {artwork.date_display}
+              </p>
+            )}
+            {artwork.dimensions && (
+              <p>
+                <strong>Dimensions:</strong> {artwork.dimensions}
+              </p>
+            )}
+            {artwork.medium_display && (
+              <p>
+                <strong>Medium:</strong> {artwork.medium_display}
+              </p>
+            )}
+            <button
+              className={`favorite-btn ${isFavorite ? 'favorite-btn--active' : ''}`}
+              onClick={toggleFavorite}
+            >
+              {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

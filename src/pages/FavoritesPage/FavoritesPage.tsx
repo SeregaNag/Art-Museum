@@ -39,7 +39,7 @@ const FavoritesPage = () => {
           ))}
         </div>
       ) : (
-        <p>No favorites yet.</p>
+        <p>No favorites yet. Add some artworks to your list!</p>
       )}
     </div>
   );

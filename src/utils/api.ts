@@ -9,10 +9,27 @@ export const apiClient = axios.create({
   timeout: 5000,
 });
 
-const getImageUrl = (image_id: string | null, iiifUrl: string): string => {
-  return image_id
-    ? `${iiifUrl}/${image_id}/full/843,/0/default.jpg`
-    : IMAGE_PLACEHOLDER;
+const getImageUrl = async (
+  image_id: string | null,
+  iiifUrl: string
+): Promise<string> => {
+  if (!image_id) {
+    return IMAGE_PLACEHOLDER;
+  }
+
+  const imageUrl = `${iiifUrl}/${image_id}/full/843,/0/default.jpg`;
+
+  try {
+    const response = await axios.get(imageUrl);
+    if (response.status === 200) {
+      return imageUrl;
+    } else {
+      return IMAGE_PLACEHOLDER;
+    }
+  } catch (error) {
+    console.error('Error loading image:', error);
+    return IMAGE_PLACEHOLDER;
+  }
 };
 
 export const fetchArtworks = async (page: number = 1): Promise<Artwork[]> => {
@@ -25,17 +42,23 @@ export const fetchArtworks = async (page: number = 1): Promise<Artwork[]> => {
 
   const iiifUrl = response.data.config.iiif_url;
 
-  return response.data.data.map(
-    (item: ArtworkSearch): Artwork => ({
-      id: item.id,
-      title: item.title,
-      artist_title: item.artist_title || null,
-      date_display: item.date_display || null,
-      image_id: item.image_id || '',
-      imageUrl: getImageUrl(item.image_id, iiifUrl),
-      is_public_domain: item.is_public_domain || false,
+  // Ожидаем результаты всех асинхронных запросов для получения URL изображения
+  const artworks = await Promise.all(
+    response.data.data.map(async (item: ArtworkSearch): Promise<Artwork> => {
+      const imageUrl = await getImageUrl(item.image_id, iiifUrl); // Ожидаем асинхронный результат
+      return {
+        id: item.id,
+        title: item.title,
+        artist_title: item.artist_title || null,
+        date_display: item.date_display || null,
+        image_id: item.image_id || '',
+        imageUrl, // Теперь это строка
+        is_public_domain: item.is_public_domain || false,
+      };
     })
   );
+
+  return artworks;
 };
 
 export const fetchSearchArtworks = async (
@@ -54,18 +77,20 @@ export const fetchSearchArtworks = async (
   return response.data.data;
 };
 
-export const fetchArtworkByLink = async (apiLink: string) => {
+export const fetchArtworkByLink = async (apiLink: string): Promise<Artwork> => {
   const response = await axios.get(apiLink);
   const artwork = response.data.data;
 
   const iiifUrl = response.data.config.iiif_url;
+  const imageUrl = await getImageUrl(artwork.image_id, iiifUrl); // Ожидаем асинхронный результат
+
   return {
     id: artwork.id,
     title: artwork.title,
     artist_title: artwork.artist_title || null,
     date_display: artwork.date_display || null,
     image_id: artwork.image_id || '',
-    imageUrl: getImageUrl(artwork.image_id, iiifUrl),
+    imageUrl, // Теперь это строка
     is_public_domain: artwork.is_public_domain || false,
   };
 };
@@ -78,11 +103,13 @@ export const fetchArtworkDetails = async (
     const data = response.data.data;
 
     const iiifUrl = response.data.config.iiif_url;
+    const imageUrl = await getImageUrl(data.image_id, iiifUrl); // Ожидаем асинхронный результат
+
     return {
       id: data.id,
       title: data.title,
       image_id: data.image_id || '',
-      imageUrl: getImageUrl(data.image_id, iiifUrl),
+      imageUrl, // Теперь это строка
       artist_title: data.artist_title,
       is_public_domain: data.is_public_domain,
       description: data.description,
