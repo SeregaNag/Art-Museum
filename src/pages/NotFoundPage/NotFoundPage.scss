@@ -1,3 +1,5 @@
+@use '/src/theme.scss' as theme;
+
 .not-found-page {
   display: flex;
   flex-direction: column;
@@ -5,12 +7,12 @@
   justify-content: center;
   text-align: center;
   height: 100vh;
-  background-color: #f8f9fa;
+  background-color: theme.$white-color;
 
   .not-found-title {
     font-size: 6rem;
     font-weight: bold;
-    color: #dc3545;
+    color: theme.$red-color;
     margin: 0;
   }
 

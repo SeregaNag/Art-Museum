@@ -37,7 +37,7 @@ const FavoritesPage = () => {
       {loading ? (
         <p>Looking for your favorites...</p>
       ) : favorites.length > 0 ? (
-        <div className="painting-list">
+        <section className="painting-list">
           {favorites.map(
             ({ id, imageUrl, title, artist_title, is_public_domain }) => (
               <PaintingCard
@@ -52,7 +52,7 @@ const FavoritesPage = () => {
               />
             )
           )}
-        </div>
+        </section>
       ) : (
         <p>No favorites yet. Add some artworks to your list!</p>
       )}

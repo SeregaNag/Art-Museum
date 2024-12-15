@@ -73,13 +73,13 @@ const HomePage = () => {
       {error && <div className="error-message">{error}</div>}
       <div className="painting-container">
         {loading ? (
-          <div className="loader"></div>
+          <section className="loader"></section>
         ) : (
-          <div className="painting-list">
+          <section className="painting-list">
             {noResults ? (
-              <div className="error-message">
+              <section className="error-message">
                 No results were found for your request "{searchQuery}"
-              </div>
+              </section>
             ) : (
               artworks.map(
                 ({ id, imageUrl, title, artist_title, is_public_domain }) => (
@@ -96,18 +96,18 @@ const HomePage = () => {
                 )
               )
             )}
-          </div>
+          </section>
         )}
       </div>
 
       {!noResults && artworks.length > 0 && (
-        <div className="pagination">
+        <footer className="pagination">
           <button disabled={page === 1} onClick={() => handlePageChange(-1)}>
             Previous page
           </button>
           <span>Page: {page}</span>
           <button onClick={() => handlePageChange(1)}>Next page</button>
-        </div>
+        </footer>
       )}
     </div>
   );

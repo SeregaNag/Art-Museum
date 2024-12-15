@@ -40,7 +40,7 @@ const PaintingDetailPage = () => {
     loadArtworkDetails();
   }, [loadArtworkDetails]);
   return (
-    <div className="artwork-details">
+    <article className="artwork-details">
       {loading && <p className="loader-details"></p>}
       {!artwork && !loading && <p>Artwork does not found</p>}
       {artwork && !loading && (
@@ -50,8 +50,7 @@ const PaintingDetailPage = () => {
             alt={artwork.title}
             className="artwork-image"
           />
-          <div className="artwork-info">
-            <h1>{artwork.title}</h1>
+          <section className="artwork-info">
             <p>
               <strong>Author:</strong> {artwork.artist_title}
             </p>
@@ -60,7 +59,7 @@ const PaintingDetailPage = () => {
               {artwork.is_public_domain ? 'Yes' : 'No'}
             </p>
             <p>
-              <strong>Description:</strong>{' '}
+              <strong>Description:</strong>
               <div
                 dangerouslySetInnerHTML={{
                   __html: artwork.description || 'No description available.',
@@ -88,10 +87,10 @@ const PaintingDetailPage = () => {
             >
               {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
             </button>
-          </div>
+          </section>
         </>
       )}
-    </div>
+    </article>
   );
 };
 

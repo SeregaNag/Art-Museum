@@ -1,4 +1,4 @@
-import React from 'react';
+import './sort.scss';
 
 type SortProps = {
   onSortChange: (sort: string) => void;
