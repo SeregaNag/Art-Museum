@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { API_URL, IMAGE_PLACEHOLDER } from 'constants/apiConstants';
-import { API_ENDPOINTS } from 'constants/apiEndpoints';
 
+import { API_URL, IMAGE_PLACEHOLDER } from '../constants/apiConstants';
+import { API_ENDPOINTS } from '../constants/apiEndpoints';
 import { Artwork, ArtworkDetails, ArtworkSearch } from '../types/types';
 
 export const apiClient = axios.create({

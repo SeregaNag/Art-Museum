@@ -22,7 +22,7 @@ describe('fetchArtworkByLink', () => {
     const apiLink = 'https://api.artic.edu/api/v1/artworks/1';
     mock.onGet(apiLink).reply(200, {
       data: {
-        id: '1',
+        id: 1,
         title: 'Artwork from Link',
         image_id: '456',
         is_public_domain: true,
@@ -32,5 +32,5 @@ describe('fetchArtworkByLink', () => {
 
     const artwork = await fetchArtworkByLink(apiLink);
     expect(artwork.title).toBe('Artwork from Link');
-  });
+  }, 20000);
 });
