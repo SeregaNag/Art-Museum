@@ -1,15 +1,12 @@
 import './HomePage.scss';
 
-import {
-  fetchArtworkByLink,
-  fetchArtworks,
-  fetchSearchArtworks,
-} from 'api/api';
 import PaintingCard from 'components/paintingCard/paintingCard';
 import SearchForm from 'components/searchForm/searchFrom';
 import Sort from 'components/Sort/sort';
-import { useEffect, useState } from 'react';
-import { Artwork, ArtworkSearch } from 'types/types';
+import { useCallback, useEffect, useState } from 'react';
+import { Artwork } from 'types/types';
+import { handleError } from 'utils/handleError';
+import { loadArtworksUtil } from 'utils/loadArtworks';
 import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 const HomePage = () => {
@@ -22,49 +19,29 @@ const HomePage = () => {
   const [sortCriteria, setSortCriteria] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
-  const loadArtworks = async () => {
+  const loadArtworks = useCallback(async () => {
     setLoading(true);
     setError(null);
     setNoResults(false);
-    try {
-      if (searchQuery.trim() === '' && sortCriteria === '') {
-        const data = await fetchArtworks(page);
-        setArtworks(data);
-      } else {
-        const searchResults = await fetchSearchArtworks(
-          searchQuery,
-          page,
-          sortCriteria
-        );
-        if (searchResults.length === 0) {
-          setNoResults(true);
-          setArtworks([]);
-        } else {
-          const detailedArtworks: Artwork[] = await Promise.all(
-            searchResults.map((item: ArtworkSearch) =>
-              fetchArtworkByLink(item.api_link)
-            )
-          );
 
-          setArtworks(detailedArtworks);
-        }
-      }
-    } catch (error: unknown) {
-      if (typeof error === 'object' && error !== null && 'message' in error) {
-        setError(
-          (error as { message: string }).message || "Couldn't fetch artworks"
-        );
+    try {
+      const data = await loadArtworksUtil(page, searchQuery, sortCriteria);
+      if (data.length === 0) {
+        setNoResults(true);
+        setArtworks([]);
       } else {
-        setError('An unknown error occurred');
+        setArtworks(data);
       }
+    } catch (error) {
+      setError(handleError(error));
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, searchQuery, sortCriteria]);
 
   useEffect(() => {
     loadArtworks();
-  }, [searchQuery, page, sortCriteria]);
+  }, [loadArtworks]);
 
   useEffect(() => {
     const storedFavorites = SessionStorageHelper.getFavorites();
@@ -77,9 +54,13 @@ const HomePage = () => {
     setNoResults(false);
   };
 
-  const handleAddToFavorites = () => {
+  const handleFavoriteClick = () => {
     const updatedFavorites = SessionStorageHelper.getFavorites();
     setFavorites(updatedFavorites);
+  };
+
+  const handlePageChange = (offset: number) => {
+    setPage((prev) => Math.max(prev + offset, 1));
   };
 
   return (
@@ -100,18 +81,20 @@ const HomePage = () => {
                 No results were found for your request "{searchQuery}"
               </div>
             ) : (
-              artworks.map((artwork) => (
-                <PaintingCard
-                  key={artwork.id}
-                  id={artwork.id}
-                  image={artwork.imageUrl}
-                  title={artwork.title}
-                  artist={artwork.artist_title}
-                  isPublic={artwork.is_public_domain}
-                  isFavorite={favorites.includes(artwork.id)}
-                  onFavoriteClick={() => handleAddToFavorites()}
-                />
-              ))
+              artworks.map(
+                ({ id, imageUrl, title, artist_title, is_public_domain }) => (
+                  <PaintingCard
+                    key={id}
+                    id={id}
+                    image={imageUrl}
+                    title={title}
+                    artist={artist_title}
+                    isPublic={is_public_domain}
+                    isFavorite={favorites.includes(id)}
+                    onFavoriteClick={handleFavoriteClick}
+                  />
+                )
+              )
             )}
           </div>
         )}
@@ -119,14 +102,11 @@ const HomePage = () => {
 
       {!noResults && artworks.length > 0 && (
         <div className="pagination">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          >
+          <button disabled={page === 1} onClick={() => handlePageChange(-1)}>
             Previous page
           </button>
           <span>Page: {page}</span>
-          <button onClick={() => setPage((prev) => prev + 1)}>Next page</button>
+          <button onClick={() => handlePageChange(1)}>Next page</button>
         </div>
       )}
     </div>
