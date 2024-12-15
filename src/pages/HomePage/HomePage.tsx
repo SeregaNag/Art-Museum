@@ -77,7 +77,7 @@ const HomePage = () => {
         ) : (
           <div className="painting-list">
             {noResults ? (
-              <div style={{ color: 'red' }}>
+              <div className="error-message">
                 No results were found for your request "{searchQuery}"
               </div>
             ) : (

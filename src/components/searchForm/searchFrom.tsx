@@ -81,7 +81,7 @@ const SearchForm: React.FC<{
           </button>
         </div>
         {formik.touched.query && formik.errors.query && (
-          <div style={{ color: 'red' }}>{formik.errors.query}</div>
+          <div className="error-message">{formik.errors.query}</div>
         )}
       </div>
     </form>

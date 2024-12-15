@@ -9,10 +9,9 @@ export const BurgerMenu = () => {
   return (
     <div className="burger-menu">
       <button
-        className="burger-toggle"
+        className={`burger-toggle ${isOpen ? 'hidden' : ''}`}
         onClick={toggleMenu}
         aria-label="Toggle Menu"
-        style={{ display: isOpen ? 'none' : 'block' }}
       >
         ☰
       </button>

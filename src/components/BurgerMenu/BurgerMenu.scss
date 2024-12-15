@@ -20,6 +20,10 @@
     &:hover {
       transform: rotate(90deg);
     }
+
+    &.hidden {
+      display: none;
+    }
   }
 
   .menu {
