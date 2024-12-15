@@ -1,11 +1,13 @@
+@use '/src/theme.scss' as theme;
+
 .burger-menu {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: theme.$padding-sm;
+  right: theme.$padding-sm;
   z-index: 1000;
   display: block;
 
-  @media (min-width: 769px) {
+  @media (min-width: 48rem) {
     display: none;
   }
 
@@ -14,7 +16,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: white;
+    color: theme.$white-color;
     transition: transform 0.3s ease;
 
     &:hover {
@@ -30,12 +32,12 @@
     position: absolute;
     top: 2.5rem;
     right: 0;
-    background: rgba(0, 0, 0, 0.9);
+    background: theme.$secondary-color;
     border: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    padding: 1rem;
-    border-radius: 8px;
-    min-width: 200px;
+    box-shadow: theme.$box-shadow;
+    padding: theme.$padding-base;
+    border-radius: theme.$border-radius;
+    min-width: 12, 5rem;
     display: none;
     z-index: 1000;
     animation: slide-in 0.3s ease;
@@ -58,19 +60,19 @@
 
         a {
           text-decoration: none;
-          color: white;
-          font-size: 1.1rem;
+          color: theme.$white-color;
+          font-size: theme.$font-size-lg;
           font-weight: bold;
           display: block;
-          padding: 0.5rem;
-          border-radius: 5px;
+          padding: theme.$padding-sm;
+          border-radius: theme.$border-radius;
           transition:
             background-color 0.3s ease,
             transform 0.2s ease;
 
           &:hover {
-            background-color: #0056b3;
-            transform: translateX(5px);
+            background-color: theme.$primary-color;
+            transform: translateX(0.3125rem);
           }
         }
       }
@@ -80,7 +82,7 @@
   @keyframes slide-in {
     from {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-0.625rem);
     }
     to {
       opacity: 1;

@@ -66,7 +66,7 @@ const SearchForm: React.FC<{
 
   return (
     <form onSubmit={handleSubmit} className="search-form">
-      <div>
+      <section>
         <input
           id="query"
           name="query"
@@ -83,7 +83,7 @@ const SearchForm: React.FC<{
         {formik.touched.query && formik.errors.query && (
           <div className="error-message">{formik.errors.query}</div>
         )}
-      </div>
+      </section>
     </form>
   );
 };

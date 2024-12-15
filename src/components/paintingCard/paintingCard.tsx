@@ -32,7 +32,7 @@ const PaintingCard: React.FC<PaintingCardProps> = ({
   };
 
   return (
-    <div className="painting-card">
+    <article className="painting-card">
       <Link to={`/artwork/${id}`} className="painting-card__link">
         <div className="painting-card__image">
           {image ? (
@@ -58,7 +58,7 @@ const PaintingCard: React.FC<PaintingCardProps> = ({
       >
         {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
       </button>
-    </div>
+    </article>
   );
 };
 

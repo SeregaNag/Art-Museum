@@ -1,0 +1,42 @@
+@use '/src/theme.scss' as theme;
+
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: theme.$padding-base;
+
+  label {
+    font-size: theme.$font-size-base;
+    font-weight: bold;
+    color: theme.$white-color;
+  }
+
+  select {
+    font-size: theme.$font-size-base;
+    padding: theme.$padding-sm;
+    border: theme.$border-width solid theme.$black-color;
+    border-radius: theme.$border-radius;
+    background-color: theme.$white-color;
+    color: theme.$black-color;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: theme.$white-color;
+      border-color: theme.$black-color;
+      color: theme.$black-color;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: theme.$primary-color;
+      box-shadow: 0 0 5px theme.$primary-color;
+    }
+
+    option {
+      font-size: theme.$font-size-sm;
+      color: theme.$black-color;
+    }
+  }
+}
