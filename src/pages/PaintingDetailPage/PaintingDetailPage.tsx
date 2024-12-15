@@ -1,9 +1,9 @@
 import './PaintingDetailPage.scss';
 
+import { fetchArtworkDetails } from 'api/api';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ArtworkDetails } from 'types/types';
-import { fetchArtworkDetails } from 'utils/api';
 import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 const PaintingDetailPage = () => {

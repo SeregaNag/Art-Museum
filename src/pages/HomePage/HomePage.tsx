@@ -1,15 +1,15 @@
 import './HomePage.scss';
 
+import {
+  fetchArtworkByLink,
+  fetchArtworks,
+  fetchSearchArtworks,
+} from 'api/api';
 import PaintingCard from 'components/paintingCard/paintingCard';
 import SearchForm from 'components/searchForm/searchFrom';
 import Sort from 'components/Sort/sort';
 import { useEffect, useState } from 'react';
 import { Artwork, ArtworkSearch } from 'types/types';
-import {
-  fetchArtworkByLink,
-  fetchArtworks,
-  fetchSearchArtworks,
-} from 'utils/api';
 import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 const HomePage = () => {

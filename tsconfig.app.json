@@ -15,7 +15,8 @@
       "types/*": ["types/*"],
       "hooks/*": ["hooks/*"],
       "pages/*": ["pages/*"],
-      "constants/*": ["constants/*"]
+      "constants/*": ["constants/*"],
+      "api/*": ["api/*"]
     },
 
     /* Bundler mode */

@@ -1,9 +1,9 @@
 import './FavoritesPage.scss';
 
+import { fetchArtworkDetails } from 'api/api';
 import PaintingCard from 'components/paintingCard/paintingCard';
 import { useEffect, useState } from 'react';
 import { Artwork, ArtworkDetails } from 'types/types';
-import { fetchArtworkDetails } from 'utils/api';
 import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 const FavoritesPage = () => {
