@@ -1,0 +1,20 @@
+@use '/src/theme.scss' as theme;
+
+.error-boundary {
+  padding: 20px;
+  border: theme.$border-width solid theme.$red-color;
+  background-color: theme.$gray-color;
+  color: theme.$red-color;
+  border-radius: theme.$border-radius;
+  text-align: center;
+}
+
+.error-boundary button {
+  margin-top: 10px;
+  padding: theme.$padding-base;
+  background-color: theme.$red-color;
+  color: theme.$white-color;
+  border: none;
+  border-radius: theme.$border-radius;
+  cursor: pointer;
+}

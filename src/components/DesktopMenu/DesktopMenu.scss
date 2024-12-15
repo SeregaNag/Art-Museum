@@ -1,0 +1,30 @@
+@use '/src/theme.scss' as theme;
+
+.desktop-menu {
+  display: flex;
+  gap: 1rem;
+  background-color: #000;
+  padding: theme.$padding-base;
+  list-style: none;
+  align-items: center;
+  justify-content: center;
+
+  ul {
+    display: flex;
+    gap: 2rem;
+
+    li {
+      a {
+        text-decoration: none;
+        color: theme.$white-color;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: theme.$primary-color;
+        }
+      }
+    }
+  }
+}

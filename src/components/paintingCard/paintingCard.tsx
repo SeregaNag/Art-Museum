@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
 import './paintingCard.scss';
+
+import { Link } from 'react-router-dom';
+import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 interface PaintingCardProps {
   id: number;
@@ -20,8 +22,17 @@ const PaintingCard: React.FC<PaintingCardProps> = ({
   onFavoriteClick,
   isFavorite,
 }) => {
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      SessionStorageHelper.removeFavorite(id);
+    } else {
+      SessionStorageHelper.addFavorite(id);
+    }
+    onFavoriteClick();
+  };
+
   return (
-    <div className="painting-card">
+    <article className="painting-card">
       <Link to={`/artwork/${id}`} className="painting-card__link">
         <div className="painting-card__image">
           {image ? (
@@ -42,12 +53,12 @@ const PaintingCard: React.FC<PaintingCardProps> = ({
         className="painting-card__favorite-btn"
         onClick={(e) => {
           e.stopPropagation();
-          onFavoriteClick();
+          toggleFavorite();
         }}
       >
         {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
       </button>
-    </div>
+    </article>
   );
 };
 

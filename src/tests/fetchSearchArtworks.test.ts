@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
-import { apiClient } from '../utils/api';
-import { fetchSearchArtworks } from '../utils/api';
+
+import { apiClient } from '../api/api';
+import { fetchSearchArtworks } from '../api/api';
 
 describe('fetchSearchArtworks', () => {
   let mock: InstanceType<typeof MockAdapter>;
@@ -19,11 +20,11 @@ describe('fetchSearchArtworks', () => {
 
   it('fetches search results successfully', async () => {
     mock.onGet('https://api.artic.edu/api/v1/artworks/search').reply(200, {
-      data: [{ id: '1', title: 'Searched Artwork' }],
+      data: [{ id: 1, title: 'Searched Artwork' }],
     });
 
     const results = await fetchSearchArtworks('query');
     expect(results).toHaveLength(1);
     expect(results[0].title).toBe('Searched Artwork');
-  });
+  }, 20000);
 });

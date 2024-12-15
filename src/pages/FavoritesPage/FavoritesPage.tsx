@@ -1,44 +1,60 @@
-import { useState, useEffect } from 'react';
-import PaintingCard from 'components/paintingCard/paintingCard';
-import { Artwork } from 'types/types';
 import './FavoritesPage.scss';
+
+import PaintingCard from 'components/paintingCard/paintingCard';
+import { useEffect, useState } from 'react';
+import { Artwork } from 'types/types';
+import { loadFavoriteArtworks } from 'utils/loadFavorites';
+import SessionStorageHelper from 'utils/sessionStorageHelper';
 
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState<Artwork[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedFavorites = sessionStorage.getItem('favorites');
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
+    const loadFavorites = async () => {
+      setLoading(true);
+      try {
+        const favoriteArtworks = await loadFavoriteArtworks();
+        setFavorites(favoriteArtworks);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFavorites();
   }, []);
 
   const handleRemoveFavorite = (id: number) => {
-    const updatedFavorites = favorites.filter((artwork) => artwork.id !== id);
-    setFavorites(updatedFavorites);
-    sessionStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    SessionStorageHelper.removeFavorite(id);
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((artwork) => artwork.id !== id)
+    );
   };
 
   return (
     <div className="favorites-page">
       <h1>Favorites</h1>
-      {favorites.length > 0 ? (
-        <div className="painting-list">
-          {favorites.map((artwork) => (
-            <PaintingCard
-              key={artwork.id}
-              id={artwork.id}
-              image={artwork.imageUrl}
-              title={artwork.title}
-              artist={artwork.artist_title}
-              isPublic={artwork.is_public_domain}
-              isFavorite={true}
-              onFavoriteClick={() => handleRemoveFavorite(artwork.id)}
-            />
-          ))}
-        </div>
+      {loading ? (
+        <p>Looking for your favorites...</p>
+      ) : favorites.length > 0 ? (
+        <section className="painting-list">
+          {favorites.map(
+            ({ id, imageUrl, title, artist_title, is_public_domain }) => (
+              <PaintingCard
+                key={id}
+                id={id}
+                image={imageUrl}
+                title={title}
+                artist={artist_title}
+                isPublic={is_public_domain}
+                isFavorite={true}
+                onFavoriteClick={() => handleRemoveFavorite(id)}
+              />
+            )
+          )}
+        </section>
       ) : (
-        <p>No favorites yet.</p>
+        <p>No favorites yet. Add some artworks to your list!</p>
       )}
     </div>
   );

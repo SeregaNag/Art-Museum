@@ -1,25 +1,45 @@
+@use '/src/theme.scss' as theme;
+
+.loader-details {
+  border: 0.25rem solid #f3f3f3;
+  border-top: 0.25rem solid #3498db;
+  border-radius: 50%;
+  width: 3.125rem;
+  height: 3.125rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .artwork-details {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 1.25rem;
 
   .artwork-image {
     max-width: 100%;
-    max-height: 300px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 18.75rem;
+    margin-bottom: 1.25rem;
+    border-radius: theme.$border-radius;
+    box-shadow: theme.$box-shadow;
   }
 
   .favorite-btn {
-    padding: 10px;
-    margin: 10px 0;
+    padding: theme.$padding-base;
+    margin: 0.625rem 0;
     background-color: #007bff;
-    color: white;
+    color: theme.$white-color;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: theme.$border-radius;
     font-size: 1rem;
 
     &:disabled {
@@ -32,25 +52,25 @@
 
     h1 {
       font-size: 1.8rem;
-      margin-bottom: 10px;
+      margin-bottom: 0.625rem;
     }
 
     p {
       font-size: 1rem;
-      margin: 5px 0;
+      margin: 0.3125rem 0;
     }
   }
 
-  @media (max-width: 420px) {
-    padding: 10px;
+  @media (max-width: 26.25rem) {
+    padding: 0.625rem;
 
     .artwork-image {
-      max-height: 250px;
+      max-height: 15.625rem;
     }
 
     .favorite-btn {
       font-size: 0.9rem;
-      padding: 8px;
+      padding: theme.$padding-sm;
     }
 
     .artwork-info {

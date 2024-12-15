@@ -1,19 +1,33 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from 'pages/HomePage/HomePage';
 import { BurgerMenu } from 'components/BurgerMenu/BurgerMenu';
-import PaintingDetailPage from 'pages/PaintingDetailPage/PaintingDetailPage';
-import FavoritesPage from 'pages/FavoritesPage/FavoritesPage';
+import { DesktopMenu } from 'components/DesktopMenu/DesktopMenu';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
+import { routes } from 'constants/routes';
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const Router = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <BrowserRouter>
-      <BurgerMenu />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/artwork/:id" element={<PaintingDetailPage />} />
-        <Route path="/favorites" element={<FavoritesPage />} />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        {isMobile ? <BurgerMenu /> : <DesktopMenu />}
+        <Routes>
+          {routes.map(({ path, component: Component }) => (
+            <Route key={path} path={path} element={<Component />} />
+          ))}
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 };
 

@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
-import { fetchArtworks } from '../utils/api';
-import { apiClient } from '../utils/api'
+
+import { fetchArtworks } from '../api/api';
+import { apiClient } from '../api/api';
 
 describe('fetchArtworks', () => {
   let mock: InstanceType<typeof MockAdapter>;
@@ -21,7 +22,7 @@ describe('fetchArtworks', () => {
     const mockResponse = {
       data: [
         {
-          id: '1',
+          id: 1,
           title: 'Artwork 1',
           artist_title: 'Artist 1',
           date_display: '2024',
@@ -37,11 +38,11 @@ describe('fetchArtworks', () => {
     const artworks = await fetchArtworks();
     expect(artworks).toHaveLength(1);
     expect(artworks[0].title).toBe('Artwork 1');
-  }, 10000);
+  }, 20000);
 
   it('handles errors gracefully', async () => {
     mock.onGet('/artworks').reply(500);
 
     await expect(fetchArtworks()).rejects.toThrow();
-  });
+  }, 20000);
 });

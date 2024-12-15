@@ -1,53 +1,58 @@
+@use '/src/theme.scss' as theme;
+
 .painting-card {
-  width: 300px;
-  height: 450px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 18.75rem;
+  height: 28.125rem;
+  background: theme.$white-color;
+  border: theme.$border-width solid theme.$gray-color;
+  border-radius: theme.$border-radius;
+  box-shadow: theme.$box-shadow;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: theme.$padding-base;
   text-align: center;
 
   img {
     width: 100%;
     height: auto;
-    max-height: 250px;
+    max-height: 15.625rem;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: theme.$border-radius;
   }
 
   h3 {
     font-size: 1.2rem;
-    margin: 10px 0;
+    margin:
+      0,
+      6rem 0;
+    color: theme.$gray-color;
   }
 
   p {
     font-size: 1rem;
-    color: #555;
+    color: theme.$gray-color;
   }
 
   button {
     padding: 0.5rem 1rem;
     background-color: #007bff;
-    color: white;
+    color: theme.$white-color;
     border: none;
-    border-radius: 5px;
+    border-radius: theme.$border-radius;
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #0056b3;
+      background-color: theme.$primary-color;
     }
   }
-  @media (max-width: 420px) {
+  @media (max-width: 26.25rem) {
     flex-direction: column;
     &__title {
-      font-size: 1rem;
+      font-size: theme.$font-size-base;
     }
     &__artist {
       font-size: 0.9rem;
