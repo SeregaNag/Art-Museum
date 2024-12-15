@@ -1,5 +1,6 @@
 import { BurgerMenu } from 'components/BurgerMenu/BurgerMenu';
 import { DesktopMenu } from 'components/DesktopMenu/DesktopMenu';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import { routes } from 'constants/routes';
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -17,14 +18,16 @@ const Router = () => {
   }, []);
 
   return (
-    <BrowserRouter>
-      {isMobile ? <BurgerMenu /> : <DesktopMenu />}
-      <Routes>
-        {routes.map(({ path, component: Component }) => (
-          <Route key={path} path={path} element={<Component />} />
-        ))}
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        {isMobile ? <BurgerMenu /> : <DesktopMenu />}
+        <Routes>
+          {routes.map(({ path, component: Component }) => (
+            <Route key={path} path={path} element={<Component />} />
+          ))}
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 };
 

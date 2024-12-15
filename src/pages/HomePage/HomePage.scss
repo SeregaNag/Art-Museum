@@ -6,6 +6,15 @@
   justify-content: center;
   min-height: 100vh;
 
+  .error-message {
+    padding: 10px;
+    margin-bottom: 15px;
+    color: #d8000c;
+    background-color: #ffe6e6;
+    border: 1px solid red;
+    border-radius: 4px;
+  }
+
   h1 {
     font-size: 2rem;
     margin-bottom: 20px;
