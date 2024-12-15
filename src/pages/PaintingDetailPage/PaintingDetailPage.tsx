@@ -1,7 +1,7 @@
 import './PaintingDetailPage.scss';
 
 import { fetchArtworkDetails } from 'api/api';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ArtworkDetails } from 'types/types';
 import SessionStorageHelper from 'utils/sessionStorageHelper';
@@ -12,35 +12,33 @@ const PaintingDetailPage = () => {
   const [loading, setLoading] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  useEffect(() => {
-    const loadArtworkDetails = async () => {
-      if (!id) return;
-      setLoading(true);
-      try {
-        const data = await fetchArtworkDetails(Number(id));
-        setArtwork(data);
-
-        setIsFavorite(SessionStorageHelper.isFavorite(Number(id)));
-      } catch (error) {
-        console.error('Fetching error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) loadArtworkDetails();
+  const loadArtworkDetails = useCallback(async () => {
+    if (!id) return;
+    setLoading(true);
+    try {
+      const data = await fetchArtworkDetails(Number(id));
+      setArtwork(data);
+      setIsFavorite(SessionStorageHelper.isFavorite(Number(id)));
+    } catch (error) {
+      console.error('Fetching error:', error);
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
 
-  const toggleFavorite = () => {
+  const handleToggleFavorite = useCallback(() => {
     if (!id) return;
     if (isFavorite) {
       SessionStorageHelper.removeFavorite(Number(id));
     } else {
       SessionStorageHelper.addFavorite(Number(id));
     }
-    setIsFavorite(!isFavorite);
-  };
+    setIsFavorite((prevState) => !prevState);
+  }, [id, isFavorite]);
 
+  useEffect(() => {
+    loadArtworkDetails();
+  }, [loadArtworkDetails]);
   return (
     <div className="artwork-details">
       {loading && <p className="loader-details"></p>}
@@ -86,7 +84,7 @@ const PaintingDetailPage = () => {
             )}
             <button
               className={`favorite-btn ${isFavorite ? 'favorite-btn--active' : ''}`}
-              onClick={toggleFavorite}
+              onClick={handleToggleFavorite}
             >
               {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
             </button>
