@@ -26,7 +26,7 @@
 - Использование TypeScript для типизирования и уменьшения количества потенциальных багов;✅
 - Использование алиасов для импортирования файлов;✅
 - Покрытие тестами 40% функциональности приложения;✅❌(Впервые писал тесты https://github.com/SeregaNag/Art-Museum/tree/main/src/tests более менее разобрался как писать тесты для функций ничего не выводящих на экран,
-![image](https://github.com/user-attachments/assets/e8529c84-0582-401c-b43f-ee7620c62e6f)
+![image](https://github.com/user-attachments/assets/40da7986-7482-41f5-9dcb-0afcf5839ec9)
 
 Вот что вывел yarn test --coverage)
 - Организацию файловой структуры react приложения. Ссылка на структуру: [Структура проекта](https://github.com/mkrivel/structure);✅
