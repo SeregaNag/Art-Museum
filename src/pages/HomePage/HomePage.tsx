@@ -20,9 +20,11 @@ const HomePage = () => {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [noResults, setNoResults] = useState<boolean>(false);
   const [sortCriteria, setSortCriteria] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
   const loadArtworks = async () => {
     setLoading(true);
+    setError(null);
     setNoResults(false);
     try {
       if (searchQuery.trim() === '' && sortCriteria === '') {
@@ -47,8 +49,14 @@ const HomePage = () => {
           setArtworks(detailedArtworks);
         }
       }
-    } catch (error) {
-      console.error('Fetching error:', error);
+    } catch (error: unknown) {
+      if (typeof error === 'object' && error !== null && 'message' in error) {
+        setError(
+          (error as { message: string }).message || "Couldn't fetch artworks"
+        );
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setLoading(false);
     }
@@ -81,6 +89,7 @@ const HomePage = () => {
 
       <Sort onSortChange={setSortCriteria} />
 
+      {error && <div className="error-message">{error}</div>}
       <div className="painting-container">
         {loading ? (
           <div className="loader"></div>
